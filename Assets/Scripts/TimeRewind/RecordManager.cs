@@ -118,17 +118,6 @@ public class RecordManager : MonoBehaviour
     }       
 }
 
-public class PlayerMemento
-{
-    public Vector3 Position { get; }
-    public Quaternion Rotation { get; }
-
-    public PlayerMemento(Vector3 position, Quaternion rotation)
-    {
-        Position = position;
-        Rotation = rotation;
-    }
-}
 
 public class PointInTime
 {
