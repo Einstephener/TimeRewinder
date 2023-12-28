@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XR;
 
 public class PlayerController : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class PlayerController : MonoBehaviour
 
     [HideInInspector]
     public bool canLook = true;
+
+    private bool settingOn;
 
     private Rigidbody _rigidbody;
 
@@ -131,5 +134,86 @@ public class PlayerController : MonoBehaviour
     {
         Cursor.lockState = toggle ? CursorLockMode.None : CursorLockMode.Locked;
         canLook = !toggle;
+    }   
+    public void OnPhoneInput(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            if (!RecordManager.instance.isPhoneOpen)
+            {
+                RecordManager.instance.isPhoneOpen = true;
+                RecordManager.instance.animator.SetTrigger("IsOpen");
+            }
+            else if (RecordManager.instance.isPhoneOpen)
+            {
+                RecordManager.instance.isPhoneOpen = false;
+                RecordManager.instance.animator.SetBool("PhoneON", false);
+                RecordManager.instance.animator.SetTrigger("IsClose");
+            }
+
+        }
+    }
+    public void OnRecordInput(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            if (RecordManager.instance.isPhoneOpen)
+            {
+                if (!RecordManager.instance.isRecording)
+                {
+                    RecordManager.instance.isRecording = true;
+
+                }
+
+                else if (RecordManager.instance.isRecording)
+                {
+                    RecordManager.instance.isRecording = false;
+                }
+            }
+            else return;
+
+        }
+    }
+    public void OnRewindInput(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            if (RecordManager.instance.isPhoneOpen)
+            {
+                if (RecordManager.instance.isRewinding)
+                {
+                    RecordManager.instance.StopRewind();
+                }
+                else 
+                {
+                    RecordManager.instance.StartRewind();
+                }
+            }
+            else return;
+
+        }
+    }
+    public void OnSettingInput(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            if (!settingOn)
+            {
+                UIManager.instance.HowToPlayPanel.SetActive(true);
+                UIManager.instance.InGamePanel.SetActive(false);
+                ToggleCursor(true);
+                settingOn = true;
+                Time.timeScale = 0f;
+            }
+            else
+            {
+                UIManager.instance.HowToPlayPanel.SetActive(false);
+                UIManager.instance.InGamePanel.SetActive(true);
+                ToggleCursor(false);
+                settingOn = false;
+                Time.timeScale = 1f;
+            }
+        }
+        
     }
 }
