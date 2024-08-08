@@ -29,3 +29,6 @@
 * 사운드 및 음악파일
   - 문 효과음:   https://www.youtube.com/watch?v=Ai_YOlpNWz4&t=26s
   - 배경음악:   https://pixabay.com/ko/music/search/genre/%EA%B3%B5%ED%8F%AC%20%EC%9E%A5%EB%A9%B4/
+
+# 플레이 영상
+[유튜브 링크](https://youtu.be/FbyntOIpuQk)
